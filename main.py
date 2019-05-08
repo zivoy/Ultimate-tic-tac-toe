@@ -74,7 +74,7 @@ class board:
 def drawGrid(display, thickness):
     w, h = display.get_size()
 
-    for i in range(3):
+    for i in range(4):
         posx = i / 3 * w
         posy = i / 3 * h
 
@@ -87,7 +87,7 @@ def drawGame(display, board):
 
     updateBoards(board, display)
 
-    drawGrid(display, 7)
+    drawGrid(display, 5)
 
 
 def createBoard(wh):
@@ -139,6 +139,28 @@ print(getColor(Color.GREEN, 13))
 
 
 s = True
+startMenu = True
+
+while startMenu:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            s = False
+            startMenu = False
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_ESCAPE:
+                startMenu = False
+    screen.fill((255, 255, 255))
+
+    imS = min(dispSz)
+
+    explanations = pygame.image.load("images/transparentImageWithExplanations.png").convert_alpha()
+    explanations = pygame.transform.scale(explanations, (imS, imS))
+    xPos = dispSz[0]/2 - imS/2
+    yPos = dispSz[1]/2 - imS/2
+    screen.blit(explanations, (5, 5))
+
+    pygame.display.flip()
+
 while s:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
