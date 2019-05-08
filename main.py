@@ -1,16 +1,17 @@
 import pygame
 from enum import Enum
 
+
 class Color(Enum):
-    RED = [242, 32, 9]
-    GREEN = [51, 214, 42]
-    YELLOW = [209, 232, 62]
-    BLACK = [0, 0, 0]
+    X = [242, 32, 9]
+    O = [51, 214, 42]
+    HIGHLIGHT = [209, 232, 62]
     WHITE = [255, 255, 255]
 
 
-def getColor(color, alpha=225):
-    return [*color.value, alpha]
+def getColor(color, alpha=225, ):
+    col = [*color.value, alpha, color.name]
+    return col
 
 
 class board:
@@ -21,17 +22,7 @@ class board:
         self.sizey = sizey
         self.displayB = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)
         self.boardOver = getColor(Color.WHITE, 0)
-        self.Board = list()
-        self.createBoard()
-
-    def createBoard(self):
-        gameB = list()
-        for i in range(3):
-            gameB.append(list())
-            for j in range(3):
-                gameB[i].append(list())
-                gameB[i][j] = getColor(Color.WHITE)
-        self.Board = gameB
+        self.Board = ticTacToeBoard()
 
     def bigBoard(self, col=None, alpha=80):
         if col is not None:
@@ -44,24 +35,24 @@ class board:
             self.Board[x][y] = getColor(col)
         else:
             return self.Board[x][y]
-            
+
     def draw(self, screen):
         self.displayB.fill((255, 255, 255))  # (0, 0, 0))
 
-        #self.boardOver[3] = 80 #128
+        # self.boardOver[3] = 80 #128
         for x in range(3):
             for y in range(3):
-                sqc = self.Board[x][y]
+                sqc = self.Board[x][y][:4:]
                 # sqc[3] = 200
                 sqx = x / 3 * self.sizex
                 sqy = y / 3 * self.sizey
 
-                s = pygame.Surface((self.sizex/3, self.sizey/3), pygame.SRCALPHA)
+                s = pygame.Surface((self.sizex / 3, self.sizey / 3), pygame.SRCALPHA)
                 s.fill(sqc)
                 self.displayB.blit(s, (sqx, sqy))
 
         s = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)
-        s.fill(self.boardOver)
+        s.fill(self.boardOver[:4:])
         self.displayB.blit(s, (0, 0))
 
         drawGrid(self.displayB, 2)
@@ -70,6 +61,7 @@ class board:
 
     def update(self, screen):
         self.draw(screen)
+
 
 def drawGrid(display, thickness):
     w, h = display.get_size()
@@ -90,19 +82,60 @@ def drawGame(display, board):
     drawGrid(display, 5)
 
 
+def ticTacToeBoard():
+    gameB = list()
+    for i in range(3):
+        gameB.append(list())
+        for j in range(3):
+            gameB[i].append(list())
+            gameB[i][j] = getColor(Color.WHITE)
+    return gameB
+
+
 def createBoard(wh):
     w, h = wh
     gboard = list()
     for i in range(3):
         gboard.append(list())
         for j in range(3):
-            gboard[i].append(board(i/3*w, j/3*h, w/3, h/3))
+            gboard[i].append(board(i / 3 * w, j / 3 * h, w / 3, h / 3))
 
     return gboard
 
 
 def updateBoards(dataTable, display):
     [[j.update(display) for j in i] for i in dataTable]
+
+
+def handleGame(dataTable):
+    for i in dataTable:
+        for j in dataTable:
+            a = j.Board
+            b = j.bigBoard()
+
+
+def clickHandler(mousePos, wh):
+    bB = [0] * 2
+    sB = [0] * 2
+    for i in range(2):
+        bB[i] = mousePos[i] / wh[i] * 9
+        sB[i] = int(bB[i]) % 3
+        bB[i] = int(bB[i] / 3)
+
+    return bB, sB
+
+
+def placeTile(dataTable, clickTile, color):
+    board = clickTile[0]
+    tile = clickTile[1]
+    dataTable[board[0]][board[1]].boardSquares(tile[0], tile[1], color)
+
+
+def flaging(variable, option1, option2):
+    if variable == option1:
+        return option2
+    else:
+        return option1
 
 
 pygame.init()
@@ -114,7 +147,7 @@ pygame.display.set_caption("Ultimate Tic Tac Toe")
 
 gameBoard = createBoard(dispSz)
 
-
+'''
 gameBoard[1][0].bigBoard(Color.GREEN, 90)
 gameBoard[1][2].bigBoard(Color.GREEN, 80)
 gameBoard[2][2].bigBoard(Color.RED, 80)
@@ -127,19 +160,21 @@ gameBoard[0][0].boardSquares(2, 2, Color.GREEN)
 gameBoard[0][0].boardSquares(0, 0, Color.RED)
 gameBoard[2][2].boardSquares(2, 2, Color.GREEN)
 
-'''for a in gameBoard:
-    print(a)'''
+for a in gameBoard:
+    print(a)
 
 drawGame(screen, gameBoard)
 
 print(gameBoard[1][2].boardSquares(2, 1))
 print(gameBoard[2][2].bigBoard())
 print(Color.RED.value)
-print(getColor(Color.GREEN, 13))
-
+print(getColor(Color.GREEN, 13))'''
 
 s = True
 startMenu = True
+clock = pygame.time.Clock()
+
+currPlayer = Color.X
 
 imS = min(dispSz)
 explanations = pygame.image.load("images/transparentImageWithExplanations.png").convert_alpha()
@@ -154,9 +189,12 @@ while startMenu:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
                 startMenu = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                startMenu = False
     screen.fill((255, 255, 255))
 
-    screen.blit(explanations, (5, 5))
+    screen.blit(explanations, (xPos, yPos))
 
     pygame.display.flip()
 
@@ -164,7 +202,15 @@ while s:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             s = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                mosPos = pygame.mouse.get_pos()
+                clicked = clickHandler(mosPos, dispSz)
+                placeTile(gameBoard, clicked, currPlayer)
+                currPlayer = flaging(currPlayer, Color.X, Color. O)
+
     drawGame(screen, gameBoard)
     pygame.display.flip()
 
+    clock.tick(60)
 pygame.quit()
