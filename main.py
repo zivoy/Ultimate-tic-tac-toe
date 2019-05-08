@@ -141,6 +141,11 @@ print(getColor(Color.GREEN, 13))
 s = True
 startMenu = True
 
+imS = min(dispSz)
+explanations = pygame.image.load("images/transparentImageWithExplanations.png").convert_alpha()
+explanations = pygame.transform.scale(explanations, (imS, imS))
+xPos = dispSz[0] / 2 - imS / 2
+yPos = dispSz[1] / 2 - imS / 2
 while startMenu:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -151,12 +156,6 @@ while startMenu:
                 startMenu = False
     screen.fill((255, 255, 255))
 
-    imS = min(dispSz)
-
-    explanations = pygame.image.load("images/transparentImageWithExplanations.png").convert_alpha()
-    explanations = pygame.transform.scale(explanations, (imS, imS))
-    xPos = dispSz[0]/2 - imS/2
-    yPos = dispSz[1]/2 - imS/2
     screen.blit(explanations, (5, 5))
 
     pygame.display.flip()
