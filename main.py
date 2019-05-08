@@ -9,31 +9,6 @@ pygame.display.set_caption("Ultimate Tic Tac Toe")
 
 gameBoard = createBoard(dispSz)
 
-'''
-gameBoard[1][0].bigBoard(Color.GREEN, 90)
-gameBoard[1][2].bigBoard(Color.GREEN, 80)
-gameBoard[2][2].bigBoard(Color.RED, 80)
-gameBoard[2][1].bigBoard(Color.YELLOW, 188)
-
-gameBoard[2][2].boardSquares(2, 1, Color.GREEN)
-gameBoard[1][2].boardSquares(1, 1, Color.RED)
-gameBoard[2][0].boardSquares(1, 2, Color.RED)
-gameBoard[0][0].boardSquares(2, 2, Color.GREEN)
-gameBoard[0][0].boardSquares(0, 0, Color.RED)
-gameBoard[2][2].boardSquares(2, 2, Color.GREEN)
-
-for a in gameBoard:
-    print(a)
-
-drawGame(screen, gameBoard)
-
-print(gameBoard[1][2].boardSquares(2, 1))
-print(gameBoard[2][2].bigBoard())
-print(Color.RED.value)
-print(getColor(Color.GREEN, 13))'''
-
-replaceWith(gameBoard, Color.WHITE, Color.HIGHLIGHT)
-
 s = True
 startMenu = True
 clock = pygame.time.Clock()
@@ -73,7 +48,9 @@ while s:
                 turn = placeTile(gameBoard, clicked, currPlayer)
                 if turn:
                     currPlayer = flaging(currPlayer, Color.X, Color.O)
-    handleGame(gameBoard)
+    win = handleGame(gameBoard)
+    if win:
+        gameBoard = createBoard(dispSz)
     drawGame(screen, gameBoard)
     pygame.display.flip()
 

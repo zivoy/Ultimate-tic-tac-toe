@@ -100,6 +100,7 @@ def createBoard(wh):
         for j in range(3):
             gboard[i].append(board(i / 3 * w, j / 3 * h, w / 3, h / 3))
 
+    replaceWith(gboard, Color.WHITE, Color.HIGHLIGHT)
     return gboard
 
 
@@ -114,9 +115,12 @@ def handleGame(dataTable):
         for j in i:
             vik = checkVictory(j.Board)
             if vik:
-                j.bigBoard(eval("Color."+vik))
+                j.bigBoard(vik)
             masterBoard[x].append(j.bigBoard())
-
+    vik = checkVictory(masterBoard)
+    if vik:
+        print(getColor(vik)[4]+" Won")
+        return vik
 
 def clickHandler(mousePos, wh):
     bB = [0] * 2
@@ -164,12 +168,12 @@ def checkVictory(board):
     for i in [Color.X, Color.O]:
         for x in range(3):
             for y in range(3):
-                if board[0][y] == board[1][y] == board[2][y] == getColor(i):
-                    return board[0][y][4]
-                if board[x][0] == board[x][1] == board[x][2] == getColor(i):
-                    return board[x][0][4]
-        if board[0][0] == board[1][1] == board[2][2] == getColor(i):
-            return board[0][0][4]
-        if board[0][2] == board[1][1] == board[2][0] == getColor(i):
-            return board[0][2][4]
+                if board[0][y][4] == board[1][y][4] == board[2][y][4] == getColor(i)[4]:
+                    return i
+                if board[x][0][4] == board[x][1][4] == board[x][2][4] == getColor(i)[4]:
+                    return i
+        if board[0][0][4] == board[1][1][4] == board[2][2][4] == getColor(i)[4]:
+            return i
+        if board[0][2][4] == board[1][1][4] == board[2][0][4] == getColor(i)[4]:
+            return i
     return False
