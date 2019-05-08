@@ -87,9 +87,13 @@ def createBoard(w, h):
     for i in range(3):
         gboard.append(list())
         for j in range(3):
-            gboard[i].append(board(i/3*w, j/2*h, w/3, h/3))
+            gboard[i].append(board(i/3*w, j/3*h, w/3, h/3))
 
     return gboard
+
+
+def updateBoards(dataTable):
+    list(map(lambda x:x.update(), dataTable))
 
 
 gameBoard = createBoard()
