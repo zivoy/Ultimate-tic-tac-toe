@@ -53,8 +53,8 @@ class board:
             for y in range(3):
                 sqc = self.Board[x][y]
                 # sqc[3] = 200
-                sqx = x / 2 * self.sizex
-                sqy = y / 2 * self.sizey
+                sqx = x / 3 * self.sizex
+                sqy = y / 3 * self.sizey
 
                 s = pygame.Surface((self.sizex/3, self.sizey/3), pygame.SRCALPHA)
                 s.fill(sqc)
