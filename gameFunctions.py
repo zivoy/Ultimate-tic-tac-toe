@@ -121,6 +121,14 @@ def handleGame(dataTable):
     if vik:
         print(getColor(vik)[4]+" Won")
         return vik
+    rep = True
+    for i in masterBoard:
+        for j in i:
+            if getColor(Color.HIGHLIGHT)[4] in j:
+                rep=False
+    if rep:
+        replaceWith(dataTable, Color.WHITE, Color.HIGHLIGHT)
+
 
 def clickHandler(mousePos, wh):
     bB = [0] * 2
@@ -140,8 +148,8 @@ def placeTile(dataTable, clickTile, color):
     currBoard = dataTable[board[0]][board[1]]
     if currBoard.bigBoard()[4] == Color.HIGHLIGHT.name:
         if currBoard.boardSquares(tile[0], tile[1])[4] == Color.WHITE.name:
-            currBoard.boardSquares(tile[0], tile[1], color)
             completed = True
+            currBoard.boardSquares(tile[0], tile[1], color)
             replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE)
             if dataTable[tile[0]][tile[1]].bigBoard()[4] != Color.WHITE.name:
                 replaceWith(dataTable, Color.WHITE, Color.HIGHLIGHT)
