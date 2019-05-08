@@ -64,31 +64,30 @@ class board:
         s.fill(self.boardOver)
         self.displayB.blit(s, (0, 0))
 
-        for i in range(4):
-            posx = i / 3 * self.sizex
-            posy = i / 3 * self.sizey
-
-            pygame.draw.line(self.displayB, (0, 0, 0), (0, posy), (self.sizex, posy), 2)
-            pygame.draw.line(self.displayB, (0, 0, 0), (posx, 0), (posx, self.sizey), 2)
+        drawGrid(self.displayB, 2)
 
         screen.blit(self.displayB, (self.boardx, self.boardy))
 
     def update(self, screen):
         self.draw(screen)
 
+def drawGrid(display, thickness):
+    w, h = display.get_size()
+
+    for i in range(3):
+        posx = i / 3 * w
+        posy = i / 3 * h
+
+        pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), thickness)
+        pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), thickness)
+
 
 def drawGame(display, board):
-    w, h = display.get_size()
     display.fill((0, 0, 0))
 
     updateBoards(board, display)
 
-    for i in range(10):
-        posx = i / 9 * w
-        posy = i / 9 * h
-        if i % 3 == 0:
-            pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), 7)
-            pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 7)
+    drawGrid(display, 7)
 
 
 def createBoard(wh):
@@ -118,7 +117,7 @@ gameBoard = createBoard(dispSz)
 gameBoard[1][0].bigBoard(Color.GREEN, 90)
 gameBoard[1][2].bigBoard(Color.GREEN, 80)
 gameBoard[2][2].bigBoard(Color.RED, 80)
-gameBoard[2][1].bigBoard(Color.YELLOW, 21)
+gameBoard[2][1].bigBoard(Color.YELLOW, 188)
 
 gameBoard[2][2].boardSquares(2, 1, Color.GREEN)
 gameBoard[1][2].boardSquares(1, 1, Color.RED)
