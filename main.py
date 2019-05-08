@@ -41,6 +41,32 @@ class board:
             self.Board[x][y] = getColor(col)
         else:
             return self.Board[x][y]
+            
+    def draw(self, screen):
+        display.fill((255, 255, 255))  # (0, 0, 0))
+        w, h = pygame.display.get_surface().get_size()
+        v=.343
+        for i in range(3):
+            for j in range(3):
+                color = boardOver
+                #color[3] = 80 #128
+                posX = i * w * v
+                posY = j * h * v
+
+                for x in range(3):
+                    for y in range(3):
+                        sqc = self.Board[x][y]
+                        # sqc[3] = 200
+                        sqx =  x / 2 * w
+                        sqy =  y / 2 * h
+
+                        s = pygame.Surface((10, 10), pygame.SRCALPHA)
+                        s.fill(sqc)
+                        display.blit(s, (sqx, sqy))
+
+                s = pygame.Surface((w * v, h * v), pygame.SRCALPHA)
+                s.fill(color)
+                display.blit(s, (posX, posY))
 
 
 
