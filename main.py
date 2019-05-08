@@ -128,7 +128,9 @@ def clickHandler(mousePos, wh):
 def placeTile(dataTable, clickTile, color):
     board = clickTile[0]
     tile = clickTile[1]
-    dataTable[board[0]][board[1]].boardSquares(tile[0], tile[1], color)
+    currBoard = dataTable[board[0]][board[1]]
+    if currBoard.bigBoard()[4] == Color.HIGHLIGHT.name:
+        currBoard.boardSquares(tile[0], tile[1], color)
 
 
 def flaging(variable, option1, option2):
@@ -169,6 +171,10 @@ print(gameBoard[1][2].boardSquares(2, 1))
 print(gameBoard[2][2].bigBoard())
 print(Color.RED.value)
 print(getColor(Color.GREEN, 13))'''
+
+[[j.bigBoard(Color.HIGHLIGHT) for j in i] for i in gameBoard]
+
+gameBoard[2][1].bigBoard(Color.WHITE)
 
 s = True
 startMenu = True
