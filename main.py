@@ -14,12 +14,12 @@ def getColor(color, alpha=225):
 
 
 class board:
-    def __init__(self, boardx, boardy, sizex, sizey, display):
+    def __init__(self, boardx, boardy, sizex, sizey):
         self.boardx = boardx
         self.boardy = boardy
         self.sizex = sizex
         self.sizey = sizey
-        self.display = display
+        self.displayB = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)
         self.boardOver = getColor(Color.WHITE, 0)
         self.Board = list()
         self.createBoard()
@@ -45,31 +45,28 @@ class board:
         else:
             return self.Board[x][y]
             
-    def draw(self):
-        self.display.fill((255, 255, 255))  # (0, 0, 0))
-        w, h = self.display.get_size()
+    def draw(self, screen):
+        self.displayB.fill((255, 255, 255))  # (0, 0, 0))
 
-        for i in range(3):
-            for j in range(3):
-                #self.boardOver[3] = 80 #128
-                for x in range(3):
-                    for y in range(3):
-                        sqc = self.Board[x][y]
-                        # sqc[3] = 200
-                        sqx = x / 2 * w
-                        sqy = y / 2 * h
+        #self.boardOver[3] = 80 #128
+        for x in range(3):
+            for y in range(3):
+                sqc = self.Board[x][y]
+                # sqc[3] = 200
+                sqx = x / 2 * self.sizex
+                sqy = y / 2 * self.sizey
 
-                        s = pygame.Surface((w/3, h/3), pygame.SRCALPHA)
-                        s.fill(sqc)
-                        self.display.blit(s, (sqx, sqy))
+                s = pygame.Surface((self.sizex/3, self.sizey/3), pygame.SRCALPHA)
+                s.fill(sqc)
+                self.displayB.blit(s, (sqx, sqy))
 
-                s = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)
-                s.fill(self.boardOver)
-                self.display.blit(s, (0, 0))
+        s.fill(self.boardOver)
+        self.displayB.blit(s, (0, 0))
+
+        screen.blit(self.displayB, (self.boardx, self.boardy))
 
     def update(self, screen):
-        self.draw()
-        screen.blit(self.display, (self.boardx, self.boardy))
+        self.draw(screen)
 
 
 def drawGame(display, board):
@@ -85,13 +82,13 @@ def drawGame(display, board):
             pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 7)
 
 
-def createBoard(wh, display):
+def createBoard(wh):
     w, h = wh
     gboard = list()
     for i in range(3):
         gboard.append(list())
         for j in range(3):
-            gboard[i].append(board(i/3*w, j/3*h, w/3, h/3, display))
+            gboard[i].append(board(i/3*w, j/3*h, w/3, h/3))
 
     return gboard
 
@@ -106,12 +103,12 @@ dispSz = [1000, 1000]
 
 screen = pygame.display.set_mode(dispSz)
 
-gameBoard = createBoard(dispSz, screen)
+gameBoard = createBoard(dispSz)
 
 
 gameBoard[1][0].bigBoard(Color.GREEN, 90)
-gameBoard[1][2].bigBoard(Color.GREEN)
-gameBoard[2][2].bigBoard(Color.RED)
+gameBoard[1][2].bigBoard(Color.GREEN, 80)
+gameBoard[2][2].bigBoard(Color.RED, 80)
 gameBoard[2][1].bigBoard(Color.YELLOW, 21)
 
 gameBoard[2][2].boardSquares(2, 1, Color.GREEN)
@@ -121,14 +118,15 @@ gameBoard[0][0].boardSquares(2, 2, Color.GREEN)
 gameBoard[0][0].boardSquares(0, 0, Color.RED)
 gameBoard[2][2].boardSquares(2, 2, Color.GREEN)
 
-for a in gameBoard:
-    print(a)
+'''for a in gameBoard:
+    print(a)'''
 
 drawGame(screen, gameBoard)
 
 print(gameBoard[1][2].boardSquares(2, 1))
 print(gameBoard[2][2].bigBoard())
-print(Color.RED)
+print(Color.RED.value)
+print(getColor(Color.GREEN, 13))
 
 
 s = True
