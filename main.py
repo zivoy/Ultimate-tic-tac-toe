@@ -110,6 +110,7 @@ pygame.init()
 dispSz = [1000, 1000]
 
 screen = pygame.display.set_mode(dispSz)
+pygame.display.set_caption("Ultimate Tic Tac Toe")
 
 gameBoard = createBoard(dispSz)
 
