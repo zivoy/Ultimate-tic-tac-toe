@@ -73,7 +73,7 @@ while s:
                 turn = placeTile(gameBoard, clicked, currPlayer)
                 if turn:
                     currPlayer = flaging(currPlayer, Color.X, Color.O)
-
+    handleGame(gameBoard)
     drawGame(screen, gameBoard)
     pygame.display.flip()
 

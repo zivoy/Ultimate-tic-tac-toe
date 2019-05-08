@@ -24,7 +24,7 @@ class board:
         self.boardOver = getColor(Color.WHITE, 0)
         self.Board = ticTacToeBoard()
 
-    def bigBoard(self, col=None, alpha=80):
+    def bigBoard(self, col=None, alpha=128):
         if col is not None:
             self.boardOver = getColor(col, alpha)
         else:
@@ -108,10 +108,14 @@ def updateBoards(dataTable, display):
 
 
 def handleGame(dataTable):
-    for i in dataTable:
-        for j in dataTable:
-            a = j.Board
-            b = j.bigBoard()
+    masterBoard = list()
+    for x, i in enumerate(dataTable):
+        masterBoard.append(list())
+        for j in i:
+            vik = checkVictory(j.Board)
+            if vik:
+                j.bigBoard(eval("Color."+vik))
+            masterBoard[x].append(j.bigBoard())
 
 
 def clickHandler(mousePos, wh):
@@ -135,7 +139,10 @@ def placeTile(dataTable, clickTile, color):
             currBoard.boardSquares(tile[0], tile[1], color)
             completed = True
             replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE)
-            dataTable[tile[0]][tile[1]].bigBoard(Color.HIGHLIGHT)
+            if dataTable[tile[0]][tile[1]].bigBoard()[4] != Color.WHITE.name:
+                replaceWith(dataTable, Color.WHITE, Color.HIGHLIGHT)
+            else:
+                dataTable[tile[0]][tile[1]].bigBoard(Color.HIGHLIGHT)
     return completed
 
 
@@ -152,3 +159,17 @@ def replaceWith(dataTable, original, changed):
             if j.bigBoard()[4] == original.name:
                 j.bigBoard(changed)
 
+
+def checkVictory(board):
+    for i in [Color.X, Color.O]:
+        for x in range(3):
+            for y in range(3):
+                if board[0][y] == board[1][y] == board[2][y] == getColor(i):
+                    return board[0][y][4]
+                if board[x][0] == board[x][1] == board[x][2] == getColor(i):
+                    return board[x][0][4]
+        if board[0][0] == board[1][1] == board[2][2] == getColor(i):
+            return board[0][0][4]
+        if board[0][2] == board[1][1] == board[2][0] == getColor(i):
+            return board[0][2][4]
+    return False
