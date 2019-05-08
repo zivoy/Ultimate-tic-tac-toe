@@ -10,7 +10,7 @@ class Color(Enum):
 
 
 def getColor(color, alpha=225):
-    return color.value, alpha
+    return [*color.value, alpha]
 
 
 class board:
@@ -20,6 +20,9 @@ class board:
         self.sizex = sizex
         self.sizey = sizey
         self.display = display
+        self.boardOver = getColor(Color.WHITE, 0)
+        self.Board = list()
+        self.createBoard()
 
     def createBoard(self):
         gameB = list()
@@ -28,7 +31,6 @@ class board:
             for j in range(3):
                 gameB[i].append(list())
                 gameB[i][j] = getColor(Color.WHITE)
-        self.boardOver = getColor(Color.WHITE, 0)
         self.Board = gameB
 
     def bigBoard(self, col=None, alpha=0):
@@ -45,7 +47,7 @@ class board:
             
     def draw(self):
         self.display.fill((255, 255, 255))  # (0, 0, 0))
-        w, h = pygame.display.get_surface().get_size()
+        w, h = self.display.get_size()
 
         for i in range(3):
             for j in range(3):
@@ -57,7 +59,7 @@ class board:
                         sqx = x / 2 * w
                         sqy = y / 2 * h
 
-                        s = pygame.Surface((10, 10), pygame.SRCALPHA)
+                        s = pygame.Surface((w/3, h/3), pygame.SRCALPHA)
                         s.fill(sqc)
                         self.display.blit(s, (sqx, sqy))
 
@@ -65,13 +67,15 @@ class board:
                 s.fill(self.boardOver)
                 self.display.blit(s, (0, 0))
 
-    def update(self):
+    def update(self, screen):
         self.draw()
+        screen.blit(self.display, (self.boardx, self.boardy))
 
 
 def drawGame(display, board):
+    w, h = display.get_size()
 
-    updateBoards(board)
+    updateBoards(board, display)
 
     for i in range(10):
         posx = i / 9 * w
@@ -79,35 +83,36 @@ def drawGame(display, board):
         if i % 3 == 0:
             pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), 7)
             pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 7)
-        else:
-            pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), 2)
-            pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 2)
 
 
-def createBoard(wh):
+def createBoard(wh, display):
     w, h = wh
     gboard = list()
     for i in range(3):
         gboard.append(list())
         for j in range(3):
-            gboard[i].append(board(i/3*w, j/3*h, w/3, h/3))
+            gboard[i].append(board(i/3*w, j/3*h, w/3, h/3, display))
 
     return gboard
 
 
-def updateBoards(dataTable):
-    list(map(lambda x:x.update(), dataTable))
+def updateBoards(dataTable, display):
+    [[j.update(display) for j in i] for i in dataTable]
+
 
 pygame.init()
 
 dispSz = [1000, 1000]
 
-gameBoard = createBoard(dispSz)
+screen = pygame.display.set_mode(dispSz)
+
+gameBoard = createBoard(dispSz, screen)
+
 
 gameBoard[1][0].bigBoard(Color.GREEN, 90)
 gameBoard[1][2].bigBoard(Color.GREEN)
 gameBoard[2][2].bigBoard(Color.RED)
-gameBoard[2][1].bigBoard(Color.YELLOW.alpha(21))
+gameBoard[2][1].bigBoard(Color.YELLOW, 21)
 
 gameBoard[2][2].boardSquares(2, 1, Color.GREEN)
 gameBoard[1][2].boardSquares(1, 1, Color.RED)
@@ -116,17 +121,15 @@ gameBoard[0][0].boardSquares(2, 2, Color.GREEN)
 gameBoard[0][0].boardSquares(0, 0, Color.RED)
 gameBoard[2][2].boardSquares(2, 2, Color.GREEN)
 
-
-screen = pygame.display.set_mode(dispSz)
+for a in gameBoard:
+    print(a)
 
 drawGame(screen, gameBoard)
 
-print(gameBoard[1][2].smallBoard(2, 1))
+print(gameBoard[1][2].boardSquares(2, 1))
 print(gameBoard[2][2].bigBoard())
 print(Color.RED)
 
-'''for a in gameBoard:
-    print(a)'''
 
 s = True
 while s:
