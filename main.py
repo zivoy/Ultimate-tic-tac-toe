@@ -118,9 +118,9 @@ def clickHandler(mousePos, wh):
     bB = [0] * 2
     sB = [0] * 2
     for i in range(2):
-        bB[i] = mousePos[i] / wh[i] * 9
-        sB[i] = int(bB[i]) % 3
-        bB[i] = int(bB[i] / 3)
+        brd = mousePos[i] / wh[i] * 9
+        bB[i] = int(brd / 3)
+        sB[i] = int(brd) % 3
 
     return bB, sB
 
@@ -207,7 +207,7 @@ while s:
                 mosPos = pygame.mouse.get_pos()
                 clicked = clickHandler(mosPos, dispSz)
                 placeTile(gameBoard, clicked, currPlayer)
-                currPlayer = flaging(currPlayer, Color.X, Color. O)
+                currPlayer = flaging(currPlayer, Color.X, Color.O)
 
     drawGame(screen, gameBoard)
     pygame.display.flip()
