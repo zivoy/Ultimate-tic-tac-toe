@@ -84,7 +84,8 @@ def drawGame(display, board):
             pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 2)
 
 
-def createBoard(w, h):
+def createBoard(wh):
+    w, h = wh
     gboard = list()
     for i in range(3):
         gboard.append(list())
@@ -97,32 +98,33 @@ def createBoard(w, h):
 def updateBoards(dataTable):
     list(map(lambda x:x.update(), dataTable))
 
-
-gameBoard = createBoard()
-
-bigBoard(gameBoard, 1, 0, Color.GREEN, 90)
-bigBoard(gameBoard, 1, 2, Color.GREEN)
-bigBoard(gameBoard, 2, 2, Color.RED)
-bigBoard(gameBoard, 2, 1, Color.YELLOW.alpha(21))
-
-smallBoard(gameBoard, 2, 2, 2, 1, colors["green"])
-smallBoard(gameBoard, 1, 2, 1, 1, colors["red"])
-smallBoard(gameBoard, 2, 0, 1, 2, colors["red"])
-smallBoard(gameBoard, 0, 0, 2, 2, colors["green"])
-smallBoard(gameBoard, 0, 0, 0, 0, colors["red"])
-smallBoard(gameBoard, 2, 2, 2, 2, colors["green"])
-
 pygame.init()
 
 dispSz = [1000, 1000]
+
+gameBoard = createBoard(dispSz)
+
+gameBoard[1][0].bigBoard(Color.GREEN, 90)
+gameBoard[1][2].bigBoard(Color.GREEN)
+gameBoard[2][2].bigBoard(Color.RED)
+gameBoard[2][1].bigBoard(Color.YELLOW.alpha(21))
+
+gameBoard[2][2].boardSquares(2, 1, Color.GREEN)
+gameBoard[1][2].boardSquares(1, 1, Color.RED)
+gameBoard[2][0].boardSquares(1, 2, Color.RED)
+gameBoard[0][0].boardSquares(2, 2, Color.GREEN)
+gameBoard[0][0].boardSquares(0, 0, Color.RED)
+gameBoard[2][2].boardSquares(2, 2, Color.GREEN)
+
 
 screen = pygame.display.set_mode(dispSz)
 
 drawGame(screen, gameBoard)
 
-print(smallBoard(gameBoard, 1, 2, 2, 1))
-print(bigBoard(gameBoard, 2, 2))
-print(colors["red"])
+print(gameBoard[1][2].smallBoard(2, 1))
+print(gameBoard[2][2].bigBoard())
+print(Color.RED)
+
 '''for a in gameBoard:
     print(a)'''
 
