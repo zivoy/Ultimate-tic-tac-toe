@@ -1,14 +1,54 @@
 import pygame
+from enum import Enum
+
+class Color(Enum):
+    RED = [242, 32, 9]
+    GREEN = [51, 214, 42]
+    YELLOW = [209, 232, 62]
+    BLACK = [0, 0, 0]
+    WHITE = [255, 255, 255]
+
+
+def getColor(color, alpha=225):
+    return color.value, alpha
+
+
+class board:
+    def __init__(self, boardx, boardy, sizex, sizey):
+        self.boardx = boardx
+        self.boardy = boardy
+        self.sizex = sizex
+        self.sizey = sizey
+
+    def createBoard(self):
+        gameB = list()
+        for i in range(3):
+            gameB.append(list())
+            for j in range(3):
+                gameB[i].append(list())
+                gameB[i][j] = getColor(Color.WHITE)
+        self.boardOver = getColor(Color.WHITE, 0)
+        self.Board = gameB
+
+    def bigBoard(self, col=None, alpha=0):
+        if col is not None:
+            self.boardOver = getColor(col, alpha)
+        else:
+            return self.boardOver
+
+    def boardSquares(self, x, y, col=None):
+        if col is not None:
+            self.Board[x][y] = getColor(col)
+        else:
+            return self.Board[x][y]
+
+
 
 
 def drawGame(display, board):
     display.fill((255, 255, 255))  # (0, 0, 0))
     w, h = pygame.display.get_surface().get_size()
-
-    sx = 1 / 7 * w * .8
-    sy = 1 / 7 * h * .8
-    v = .3435
-
+    v=.343
     for i in range(3):
         for j in range(3):
             color = board[i][j][0]
@@ -20,10 +60,10 @@ def drawGame(display, board):
                 for y in range(3):
                     sqc = board[i][j][1][x][y]
                     # sqc[3] = 200
-                    sqx = posX + x * sx
-                    sqy = posY + y * sx
+                    sqx =  x / 2 * w
+                    sqy =  y / 2 * h
 
-                    s = pygame.Surface((sx, sx), pygame.SRCALPHA)
+                    s = pygame.Surface((10, 10), pygame.SRCALPHA)
                     s.fill(sqc)
                     display.blit(s, (sqx, sqy))
 
@@ -31,60 +71,33 @@ def drawGame(display, board):
             s.fill(color)
             display.blit(s, (posX, posY))
 
-    for i in range(8):
-        posx = i / 7 * w * .8 + sx
-        posy = i / 7 * h * .8 + sy
-        pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), 2)
-        pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 2)
-    for j in range(2):
-        posx = j * w * v + w * v
-        posy = j * h * v + h * v
-        pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), 7)
-        pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 7)
+    for i in range(10):
+        posx = i / 9 * w
+        posy = i / 9 * h
+        if i % 3 == 0:
+            pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), 7)
+            pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 7)
+        else:
+            pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), 2)
+            pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), 2)
 
 
-def createBoard():
-    board = list()
+def createBoard(w, h):
+    gboard = list()
     for i in range(3):
-        board.append(list())
+        gboard.append(list())
         for j in range(3):
-            board[i].append([list(), list()])
-            bigBoard(board, i, j, colors["white"])
-            for x in range(3):
-                board[i][j][1].append(list())
-                for y in range(3):
-                    board[i][j][1][x].append(list())
-                    smallBoard(board, i, j, x, y, colors["white"])
-    return board
+            gboard[i].append(board(i/3*w, j/2*h, w/3, h/3))
 
+    return gboard
 
-def bigBoard(board, x, y, col=None, alpha=None):
-    if alpha is None:
-        alpha = 80
-    if col is not None:
-        board[x][y][0] = col.copy()
-        board[x][y][0][3] = alpha
-    else:
-        return board[x][y][0]
-
-
-def smallBoard(board, bx, by, x, y, col=None):
-    if col is not None:
-        board[bx][by][1][x][y] = col.copy()
-    else:
-        return board[bx][by][1][x][y]
-
-
-colors = {"white": [255, 255, 255, 255],
-          "red": [242, 32, 9, 255],
-          "green": [51, 214, 42, 255]}
 
 gameBoard = createBoard()
 
-bigBoard(gameBoard, 1, 0, colors["green"], 90)
-bigBoard(gameBoard, 1, 2, colors["green"])
-bigBoard(gameBoard, 2, 2, colors["red"])
-bigBoard(gameBoard, 2, 1, [209, 232, 62, 128])
+bigBoard(gameBoard, 1, 0, Color.GREEN, 90)
+bigBoard(gameBoard, 1, 2, Color.GREEN)
+bigBoard(gameBoard, 2, 2, Color.RED)
+bigBoard(gameBoard, 2, 1, Color.YELLOW.alpha(21))
 
 smallBoard(gameBoard, 2, 2, 2, 1, colors["green"])
 smallBoard(gameBoard, 1, 2, 1, 1, colors["red"])
@@ -95,7 +108,7 @@ smallBoard(gameBoard, 2, 2, 2, 2, colors["green"])
 
 pygame.init()
 
-dispSz = [900, 900]
+dispSz = [1000, 1000]
 
 screen = pygame.display.set_mode(dispSz)
 
