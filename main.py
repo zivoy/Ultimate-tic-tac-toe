@@ -33,7 +33,7 @@ class board:
                 gameB[i][j] = getColor(Color.WHITE)
         self.Board = gameB
 
-    def bigBoard(self, col=None, alpha=0):
+    def bigBoard(self, col=None, alpha=80):
         if col is not None:
             self.boardOver = getColor(col, alpha)
         else:
@@ -60,8 +60,16 @@ class board:
                 s.fill(sqc)
                 self.displayB.blit(s, (sqx, sqy))
 
+        s = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)
         s.fill(self.boardOver)
         self.displayB.blit(s, (0, 0))
+
+        for i in range(4):
+            posx = i / 3 * self.sizex
+            posy = i / 3 * self.sizey
+
+            pygame.draw.line(self.displayB, (0, 0, 0), (0, posy), (self.sizex, posy), 2)
+            pygame.draw.line(self.displayB, (0, 0, 0), (posx, 0), (posx, self.sizey), 2)
 
         screen.blit(self.displayB, (self.boardx, self.boardy))
 
@@ -71,6 +79,7 @@ class board:
 
 def drawGame(display, board):
     w, h = display.get_size()
+    display.fill((0, 0, 0))
 
     updateBoards(board, display)
 
