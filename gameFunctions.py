@@ -134,6 +134,8 @@ def placeTile(dataTable, clickTile, color):
         if currBoard.boardSquares(tile[0], tile[1])[4] == Color.WHITE.name:
             currBoard.boardSquares(tile[0], tile[1], color)
             completed = True
+            replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE)
+            dataTable[tile[0]][tile[1]].bigBoard(Color.HIGHLIGHT)
     return completed
 
 
@@ -144,9 +146,9 @@ def flaging(variable, option1, option2):
         return option1
 
 
-def highlightAvaiable(dataTable):
+def replaceWith(dataTable, original, changed):
     for i in dataTable:
         for j in i:
-            if j.bigBoard()[4] == Color.WHITE.name:
-                j.bigBoard(Color.HIGHLIGHT)
+            if j.bigBoard()[4] == original.name:
+                j.bigBoard(changed)
 

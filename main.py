@@ -32,9 +32,7 @@ print(gameBoard[2][2].bigBoard())
 print(Color.RED.value)
 print(getColor(Color.GREEN, 13))'''
 
-highlightAvaiable(gameBoard)
-
-gameBoard[2][1].bigBoard(Color.WHITE)
+replaceWith(gameBoard, Color.WHITE, Color.HIGHLIGHT)
 
 s = True
 startMenu = True
