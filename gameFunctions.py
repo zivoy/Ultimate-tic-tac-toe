@@ -88,7 +88,7 @@ def ticTacToeBoard():
         gameB.append(list())
         for j in range(3):
             gameB[i].append(list())
-            gameB[i][j] = getColor(Color.WHITE)
+            gameB[i][j] = getColor(Color.WHITE, 0)
     return gameB
 
 
@@ -100,7 +100,7 @@ def createBoard(wh):
         for j in range(3):
             gboard[i].append(board(i / 3 * w, j / 3 * h, w / 3, h / 3))
 
-    replaceWith(gboard, Color.WHITE, Color.HIGHLIGHT)
+    replaceWith(gboard, Color.WHITE, Color.HIGHLIGHT, 80)
     return gboard
 
 
@@ -146,12 +146,12 @@ def placeTile(dataTable, clickTile, color):
         if currBoard.boardSquares(tile[0], tile[1])[4] == Color.WHITE.name:
             completed = True
             currBoard.boardSquares(tile[0], tile[1], color)
-            replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE)
+            replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE, 0)
             handleGame(dataTable)
             if dataTable[tile[0]][tile[1]].bigBoard()[4] != Color.WHITE.name:
-                replaceWith(dataTable, Color.WHITE, Color.HIGHLIGHT)
+                replaceWith(dataTable, Color.WHITE, Color.HIGHLIGHT, 80)
             else:
-                dataTable[tile[0]][tile[1]].bigBoard(Color.HIGHLIGHT)
+                dataTable[tile[0]][tile[1]].bigBoard(Color.HIGHLIGHT, 80)
     return completed
 
 
@@ -162,11 +162,11 @@ def flaging(variable, option1, option2):
         return option1
 
 
-def replaceWith(dataTable, original, changed):
+def replaceWith(dataTable, original, changed, alpha=180):
     for i in dataTable:
         for j in i:
             if j.bigBoard()[4] == original.name:
-                j.bigBoard(changed)
+                j.bigBoard(changed, alpha)
 
 
 def checkVictory(board):

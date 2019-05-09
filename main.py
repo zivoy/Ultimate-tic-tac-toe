@@ -41,7 +41,7 @@ while startMenu:
     pygame.display.flip()
 
 while s:
-    screen.fill((255, 255, 255))
+    screen.fill((170, 96, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             s = False
@@ -60,6 +60,8 @@ while s:
     if win:
         gameBoard = createBoard(boardSz)
     drawGame(gameScreen, gameBoard)
+    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(1020, 30, 370, 960))
+    pygame.draw.rect(screen, getColor(currPlayer)[:4:], pygame.Rect(1050, 60, 100, 100))
     screen.blit(gameScreen, gameAt)
 
     pygame.display.flip()
