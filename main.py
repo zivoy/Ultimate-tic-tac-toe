@@ -1,6 +1,7 @@
 from gameFunctions import *
 
 pygame.init()
+pygame.mixer.init(22050, 16, 2, 1024)
 
 sz = 800
 
@@ -13,6 +14,16 @@ pygame.display.set_caption("Ultimate Tic Tac Toe")
 
 gameScreen = pygame.Surface(boardSz)
 gameBoard, currPlayer = initBoard(boardSz)
+playerSound = 2
+
+hitSounds = list()
+
+for i in range(1, 4):
+    sound = pygame.mixer.Sound("sounds/hit{0}.wav".format(i))
+    hitSounds.append(sound)
+
+pygame.mixer.music.load('sounds/elevator.wav')
+
 
 s = True
 startMenu = True
@@ -31,9 +42,11 @@ while startMenu:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
                 startMenu = False
+            pygame.mixer.Sound.play(hitSounds[0])
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 startMenu = False
+            pygame.mixer.Sound.play(hitSounds[1])
     screen.fill((255, 255, 255))
 
     screen.blit(explanations, (xPos, yPos))
@@ -42,6 +55,8 @@ while startMenu:
 
 screen = pygame.display.set_mode(dispSz)
 playing = True
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(.2)
 
 while s:
     screen.fill((170, 96, 0))
@@ -56,15 +71,17 @@ while s:
                 if Buttons['reset'].collidepoint(mosPos):
                     gameBoard, currPlayer = initBoard(boardSz)
                     playing = True
+                    pygame.mixer.Sound.play(hitSounds[1])
 
                 if playing:
                     for i in range(2):
                         mosPos[i] -= gameAt[i]
                     clicked = clickHandler(mosPos, boardSz)
                     if clicked:
-                        turn = placeTile(gameBoard, clicked, currPlayer)
+                        turn = placeTile(gameBoard, clicked, currPlayer, hitSounds[playerSound])
                     if turn:
                         currPlayer = flaging(currPlayer, Color.X, Color.O)
+                        playerSound = flaging(playerSound, 0, 2)
 
     drawGame(gameScreen, gameBoard)
 
@@ -80,4 +97,6 @@ while s:
     pygame.display.flip()
 
     clock.tick(60)
+
+pygame.mixer.quit()
 pygame.quit()

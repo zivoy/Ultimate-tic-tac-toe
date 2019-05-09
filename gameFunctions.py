@@ -125,6 +125,8 @@ def handleGame(dataTable):
     vik = checkVictory(masterBoard)
     if vik:
         # print(getColor(vik)[4] + " Won")
+        replaceWith(dataTable, Color.GRAY, Color.WHITE, 0)
+        replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE, 0)
         return vik
 
 
@@ -135,19 +137,20 @@ def clickHandler(mousePos, wh):
         if mousePos[i] < 0 or mousePos[i] > wh[i]:
             return False
         brd = mousePos[i] / wh[i] * 9
-        bB[i] = int(brd / 3)
-        sB[i] = int(brd) % 3
+        bB[i] = min(int(brd / 3), 2)
+        sB[i] = min(int(brd) % 3, 2)
 
     return bB, sB
 
 
-def placeTile(dataTable, clickTile, color):
+def placeTile(dataTable, clickTile, color, sound):
     completed = False
     board = clickTile[0]
     tile = clickTile[1]
     currBoard = dataTable[board[0]][board[1]]
     if currBoard.bigBoard()[4] == Color.HIGHLIGHT.name:
         if currBoard.boardSquares(tile[0], tile[1])[4] == Color.WHITE.name:
+            pygame.mixer.Sound.play(sound)
             completed = True
             currBoard.boardSquares(tile[0], tile[1], color)
             replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE, 0)
