@@ -7,6 +7,7 @@ class Color(Enum):
     O = [51, 214, 42]
     HIGHLIGHT = [209, 232, 62]
     WHITE = [255, 255, 255]
+    GRAY = [150, 150, 150]
 
 
 def getColor(color, alpha=225):
@@ -25,7 +26,7 @@ class board:
         self.boardOver = getColor(Color.WHITE, 0)
         self.Board = ticTacToeBoard()
 
-    def bigBoard(self, col=None, alpha=128):
+    def bigBoard(self, col=None, alpha=180):
         if col is not None:
             self.boardOver = getColor(col, alpha)
         else:
@@ -157,6 +158,7 @@ def placeTile(dataTable, clickTile, color):
                 replaceWith(dataTable, Color.WHITE, Color.HIGHLIGHT, 80)
             else:
                 dataTable[tile[0]][tile[1]].bigBoard(Color.HIGHLIGHT, 80)
+                replaceWith(dataTable, Color.WHITE, Color.GRAY, 80)
     return completed
 
 
