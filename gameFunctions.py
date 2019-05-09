@@ -1,6 +1,8 @@
 import pygame
 from enum import Enum
 
+Buttons = dict()
+
 
 class Color(Enum):
     X = [242, 32, 9]
@@ -8,6 +10,7 @@ class Color(Enum):
     HIGHLIGHT = [209, 232, 62]
     WHITE = [255, 255, 255]
     GRAY = [150, 150, 150]
+    BLUE = [38, 73, 160]
 
 
 def getColor(color, alpha=225):
@@ -44,18 +47,14 @@ class board:
         # self.boardOver[3] = 80 #128
         for x in range(self.parts):
             for y in range(self.parts):
-                sqc = self.Board[x][y][:4:]
+                sqc = self.Board[x][y]
                 # sqc[3] = 200
                 sqx = x / self.parts * self.sizex
                 sqy = y / self.parts * self.sizey
 
-                s = pygame.Surface((self.sizex / self.parts, self.sizey / self.parts), pygame.SRCALPHA)
-                s.fill(sqc)
-                self.displayB.blit(s, (sqx, sqy))
+                fillColor(self.displayB, sqc, (self.sizex / self.parts, self.sizey / self.parts), (sqx, sqy))
 
-        s = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)
-        s.fill(self.boardOver[:4:])
-        self.displayB.blit(s, (0, 0))
+        fillColor(self.displayB, self.boardOver, (self.sizex, self.sizey))
 
         drawGrid(self.displayB, 2, self.parts)
 
@@ -68,7 +67,7 @@ class board:
 def drawGrid(display, thickness, amount=3):
     w, h = display.get_size()
 
-    for i in range(amount+1):
+    for i in range(amount + 1):
         posx = i / amount * w
         posy = i / amount * h
 
@@ -100,11 +99,11 @@ def createBoard(wh):
     for i in range(3):
         gboard.append(list())
         for j in range(3):
-            x = round(i / 3 * w)
-            y = round(j / 3 * h)
-            l = round(h / 3)
-            s = round(w / 3)
-            gboard[i].append(board(x,y, s, l))
+            x = round(i / 3 * w + .5)
+            y = round(j / 3 * h + .5)
+            l = round(h / 3 + 1.2)
+            s = round(w / 3 + 1.2)
+            gboard[i].append(board(x, y, s, l))
 
     replaceWith(gboard, Color.WHITE, Color.HIGHLIGHT, 80)
     return gboard
@@ -125,12 +124,11 @@ def handleGame(dataTable):
             masterBoard[x].append(j.bigBoard())
     vik = checkVictory(masterBoard)
     if vik:
-        print(getColor(vik)[4] + " Won")
+        # print(getColor(vik)[4] + " Won")
         return vik
 
 
 def clickHandler(mousePos, wh):
-
     bB = [0] * 2
     sB = [0] * 2
     for i in range(2):
@@ -193,8 +191,27 @@ def checkVictory(board):
 
 
 def infromationBox(screen, screenSz, curP):
-    wBox = pygame.Rect(screenSz[0]*.73, screenSz[1]*.03, screenSz[0]*.26, screenSz[1]*.94)
-    pygame.draw.rect(screen, (255, 255, 255), wBox)
+    global Buttons
 
-    cBox = pygame.Rect(screenSz[0]*.75, screenSz[1]*.06, 100, 100)
+    wBox = pygame.Rect(screenSz[0] * .73, screenSz[1] * .03, screenSz[0] * .26, screenSz[1] * .94)
+    reset = pygame.Rect(screenSz[0] * .75, screenSz[1] * .85, screenSz[0] * .22, screenSz[1] * .1)
+    cBox = pygame.Rect(screenSz[0] * .75, screenSz[1] * .06, screenSz[1] * .1, screenSz[1] * .1)
+
+    Buttons["reset"] = reset
+
+    pygame.draw.rect(screen, Color.WHITE.value, wBox)
+    pygame.draw.rect(screen, Color.BLUE.value, reset)
     pygame.draw.rect(screen, getColor(curP)[:4:], cBox)
+
+
+def initBoard(sz, p=0):
+    gBoard = createBoard(sz)
+    startP = Color.X if not p else Color.O
+
+    return gBoard, startP
+
+
+def fillColor(display, color, sz, pos=(0, 0)):
+    s = pygame.Surface(sz, pygame.SRCALPHA)
+    s.fill(color[:4:])
+    display.blit(s, pos)
