@@ -119,13 +119,13 @@ def handleGame(dataTable):
             masterBoard[x].append(j.bigBoard())
     vik = checkVictory(masterBoard)
     if vik:
-        print(getColor(vik)[4]+" Won")
+        print(getColor(vik)[4] + " Won")
         return vik
     rep = True
     for i in masterBoard:
         for j in i:
             if getColor(Color.HIGHLIGHT)[4] in j:
-                rep=False
+                rep = False
     if rep:
         replaceWith(dataTable, Color.WHITE, Color.HIGHLIGHT)
 
