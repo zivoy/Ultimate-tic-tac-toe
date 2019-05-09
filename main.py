@@ -2,9 +2,9 @@ from gameFunctions import *
 
 pygame.init()
 
-dispSz = [1400, 1000]
+dispSz = [1400, 1020]
 boardSz = [1000, 1000]
-gameAt = [10, 0]
+gameAt = [10, 10]
 
 screen = pygame.display.set_mode(dispSz)
 pygame.display.set_caption("Ultimate Tic Tac Toe")
