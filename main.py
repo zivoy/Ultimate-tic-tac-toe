@@ -2,7 +2,7 @@ from gameFunctions import *
 
 pygame.init()
 
-szMultipliyer = 80
+szMultiplier = 80
 
 
 sz = 1000
