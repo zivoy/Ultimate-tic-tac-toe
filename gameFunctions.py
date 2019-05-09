@@ -153,12 +153,13 @@ def placeTile(dataTable, clickTile, color):
             completed = True
             currBoard.boardSquares(tile[0], tile[1], color)
             replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE, 0)
+            replaceWith(dataTable, Color.GRAY, Color.WHITE, 0)
             handleGame(dataTable)
             if dataTable[tile[0]][tile[1]].bigBoard()[4] != Color.WHITE.name:
                 replaceWith(dataTable, Color.WHITE, Color.HIGHLIGHT, 80)
             else:
                 dataTable[tile[0]][tile[1]].bigBoard(Color.HIGHLIGHT, 80)
-                replaceWith(dataTable, Color.WHITE, Color.GRAY, 80)
+                replaceWith(dataTable, Color.WHITE, Color.GRAY, 60)
     return completed
 
 
