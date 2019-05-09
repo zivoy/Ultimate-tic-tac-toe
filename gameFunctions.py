@@ -15,11 +15,12 @@ def getColor(color, alpha=225):
 
 
 class board:
-    def __init__(self, boardx, boardy, sizex, sizey):
+    def __init__(self, boardx, boardy, sizex, sizey, parts=3):
         self.boardx = boardx
         self.boardy = boardy
         self.sizex = sizex
         self.sizey = sizey
+        self.parts = parts
         self.displayB = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)
         self.boardOver = getColor(Color.WHITE, 0)
         self.Board = ticTacToeBoard()
@@ -40,14 +41,14 @@ class board:
         self.displayB.fill((255, 255, 255))  # (0, 0, 0))
 
         # self.boardOver[3] = 80 #128
-        for x in range(3):
-            for y in range(3):
+        for x in range(self.parts):
+            for y in range(self.parts):
                 sqc = self.Board[x][y][:4:]
                 # sqc[3] = 200
-                sqx = x / 3 * self.sizex
-                sqy = y / 3 * self.sizey
+                sqx = x / self.parts * self.sizex
+                sqy = y / self.parts * self.sizey
 
-                s = pygame.Surface((self.sizex / 3, self.sizey / 3), pygame.SRCALPHA)
+                s = pygame.Surface((self.sizex / self.parts, self.sizey / self.parts), pygame.SRCALPHA)
                 s.fill(sqc)
                 self.displayB.blit(s, (sqx, sqy))
 
@@ -55,7 +56,7 @@ class board:
         s.fill(self.boardOver[:4:])
         self.displayB.blit(s, (0, 0))
 
-        drawGrid(self.displayB, 2)
+        drawGrid(self.displayB, 2, self.parts)
 
         screen.blit(self.displayB, (self.boardx, self.boardy))
 
@@ -63,12 +64,12 @@ class board:
         self.draw(screen)
 
 
-def drawGrid(display, thickness):
+def drawGrid(display, thickness, amount=3):
     w, h = display.get_size()
 
-    for i in range(4):
-        posx = i / 3 * w
-        posy = i / 3 * h
+    for i in range(amount+1):
+        posx = i / amount * w
+        posy = i / amount * h
 
         pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), thickness)
         pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), thickness)
@@ -182,3 +183,11 @@ def checkVictory(board):
         if board[0][2][4] == board[1][1][4] == board[2][0][4] == getColor(i)[4]:
             return i
     return False
+
+
+def infromationBox(screen, screenSz, curP):
+    wBox = pygame.Rect(screenSz[0]*.73, screenSz[1]*.03, screenSz[0]*.26, screenSz[1]*.94)
+    pygame.draw.rect(screen, (255, 255, 255), wBox)
+
+    cBox = pygame.Rect(screenSz[0]*.75, screenSz[1]*.06, 100, 100)
+    pygame.draw.rect(screen, getColor(curP)[:4:], cBox)

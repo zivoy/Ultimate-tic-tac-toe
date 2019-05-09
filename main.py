@@ -2,9 +2,15 @@ from gameFunctions import *
 
 pygame.init()
 
-dispSz = [1400, 1020]
-boardSz = [1000, 1000]
-gameAt = [10, 10]
+szMultipliyer = 80
+
+
+sz = 1000
+
+sz = sz * szMultipliyer / 100
+boardSz = [sz, sz]
+dispSz = [int(boardSz[0] * 1.4), int(boardSz[1] * 1.02)]
+gameAt = [int(boardSz[0] * .01), int(boardSz[1] * .01)]
 
 screen = pygame.display.set_mode(dispSz)
 pygame.display.set_caption("Ultimate Tic Tac Toe")
@@ -60,9 +66,10 @@ while s:
     if win:
         gameBoard = createBoard(boardSz)
     drawGame(gameScreen, gameBoard)
-    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(1020, 30, 370, 960))
-    pygame.draw.rect(screen, getColor(currPlayer)[:4:], pygame.Rect(1050, 60, 100, 100))
+
     screen.blit(gameScreen, gameAt)
+
+    infromationBox(screen, dispSz, currPlayer)
 
     pygame.display.flip()
 
