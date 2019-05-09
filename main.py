@@ -5,8 +5,8 @@ pygame.init()
 sz = 800
 
 boardSz = [sz, sz]
-dispSz = [int(sz * 1.4), int(sz * 1.02)]
-gameAt = [int(sz * .01), int(sz * .01)]
+dispSz = [round(sz * 1.4), round(sz * 1.02)]
+gameAt = [round(sz * .01), round(sz * .01)]
 
 screen = pygame.display.set_mode(boardSz)
 pygame.display.set_caption("Ultimate Tic Tac Toe")

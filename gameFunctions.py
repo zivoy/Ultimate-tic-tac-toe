@@ -99,7 +99,11 @@ def createBoard(wh):
     for i in range(3):
         gboard.append(list())
         for j in range(3):
-            gboard[i].append(board(i / 3 * w, j / 3 * h, w / 3, h / 3))
+            x = round(i / 3 * w)
+            y = round(j / 3 * h)
+            l = round(h / 3)
+            s = round(w / 3)
+            gboard[i].append(board(x,y, s, l))
 
     replaceWith(gboard, Color.WHITE, Color.HIGHLIGHT, 80)
     return gboard
