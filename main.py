@@ -19,7 +19,8 @@ startMenu = True
 clock = pygame.time.Clock()
 
 explanations = pygame.image.load("images/Instructions.png").convert_alpha()
-explanations = pygame.transform.scale(explanations, boardSz)
+scl = sz / max(explanations.get_rect().size)
+explanations = pygame.transform.rotozoom(explanations, 0, scl)
 xPos = sz / 2 - sz / 2
 yPos = sz / 2 - sz / 2
 while startMenu:
