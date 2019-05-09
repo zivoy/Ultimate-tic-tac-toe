@@ -15,7 +15,7 @@ class Color(Enum):
     BLUE = [38, 73, 160]
 
 
-# class that handles game boards
+# class that handles small game boards
 class board:
     def __init__(self, boardx, boardy, sizex, sizey, parts=3):
         self.boardx = boardx     # define the board x position
@@ -26,22 +26,22 @@ class board:
         self.displayB = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)   # make board surface
         self.boardOver = getColor(Color.WHITE, 0)                   # sets default board overlay to transparent white
         self.Board = ticTacToeBoard(getColor(Color.WHITE, 0))       # makes an empty list to hold the board
-    # class that handles small boards
 
+    # function that changes the color over boards
     def bigBoard(self, col=None, alpha=180):
         if col is not None:
             self.boardOver = getColor(col, alpha)   # checks if a color was given if so set that as the overlay color
         else:
             return self.boardOver                   # else return the overlay color
-    # function that changes the color over boards
 
+    # function that changes the color of board tiles
     def boardSquares(self, x, y, col=None):
         if col is not None:
             self.Board[x][y] = getColor(col)        # checks if a color was given if so set that as the tile color
         else:
             return self.Board[x][y]                 # else return the tile color
-    # function that changes the color of board tiles
 
+    # function that draw the board
     def draw(self, screen):
         self.displayB.fill(getColor(Color.WHITE))  # fill surface with white
 
@@ -62,19 +62,19 @@ class board:
 
         screen.blit(self.displayB, (self.boardx, self.boardy))
         # put it on the surface
-    # function that draw the board
 
+    # function that updates the board
     def update(self, screen):
         self.draw(screen)
-    # function that updates the board
 
 
+# function that gets the color adds alpha and returns it in different format
 def getColor(color, alpha=225):
     col = [*color.value, alpha, color.name]
     return col
-# function that gets the color adds alpha and returns it in different format
 
 
+# draw a grid
 def drawGrid(display, thickness, amount=3):
     w, h = display.get_size()       # get width and height
 
@@ -85,18 +85,18 @@ def drawGrid(display, thickness, amount=3):
         pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), thickness)
         pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), thickness)
         # draw lines
-# draw a grid
 
 
+# draw the whole game board
 def drawGame(display, board):
     display.fill((0, 0, 0))         # fill display with black
 
     updateBoards(board, display)    # update the boards
 
     drawGrid(display, 3)            # draw a grid over everything
-# draw the whole game board
 
 
+# make a list that makes an empty list and populates it with a item
 def ticTacToeBoard(fillWith):
     gameB = list()                      # make list
     for i in range(3):
@@ -104,9 +104,9 @@ def ticTacToeBoard(fillWith):
         for j in range(3):
             gameB[i].append(fillWith)   # put the color list in the list
     return gameB
-# make a list that makes an empty list and populates it with a item
 
 
+# function that makes a list that handles the entire game board
 def createBoard(wh):
     w, h = wh                           # separate width and height
     gboard = list()                     # make a list
@@ -124,14 +124,14 @@ def createBoard(wh):
     replaceWith(gboard, Color.WHITE, Color.HIGHLIGHT, 80)
     # highlight all boards
     return gboard
-# function that makes a list that handles the entire game board
 
 
+# dunction that updates all boards
 def updateBoards(dataTable, display):
     [[j.update(display) for j in i] for i in dataTable]
-# dunction that updates all boards
 
 
+# function that handles game logic
 def handleGame(dataTable):
     masterBoard = list()    # make a list for the board
     for x, i in enumerate(dataTable):
@@ -147,9 +147,9 @@ def handleGame(dataTable):
         replaceWith(dataTable, Color.GRAY, Color.WHITE, 0)       # if there's a winner replace all the
         replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE, 0)  # highlight and gray with white
         return vik
-# function that handles game logic
 
 
+# functions that calculates what board and tile was pressed
 def clickHandler(mousePos, wh):
     bB = [0] * 2  # make empty lists
     sB = [0] * 2
@@ -161,9 +161,9 @@ def clickHandler(mousePos, wh):
         sB[i] = min(int(brd) % 3, 2)    # modulo of three to make it repeat to 0 when reached 3
 
     return bB, sB  # return board clicked and tile clicked
-# functions that calculates what board and tile was pressed
 
 
+# functions that places a tile and handles colors
 def placeTile(dataTable, clickTile, color, sound):
     completed = False    # variable for if the turn was completed
     game = clickTile[0]  # split board and tile clicks
@@ -194,25 +194,25 @@ def placeTile(dataTable, clickTile, color, sound):
                 replaceWith(dataTable, Color.WHITE, Color.GRAY, 60)        # and the rest to be gray
 
     return completed
-# functions that places a tile and handles colors
 
 
+# made to make flag variables easier
 def flaging(variable, option1, option2):
     if variable == option1:
         return option2  # return option 2 if the variable is the same as option 1
     else:
         return option1  # else return option 1
-# made to make flag variables easier
 
 
+# replaces all board colors with certain color
 def replaceWith(dataTable, original, changed, alpha=180):
     for i in dataTable:  # iterate through table
         for j in i:
             if j.bigBoard()[4] == original.name:
                 j.bigBoard(changed, alpha)  # if the color is the origin color replace it with the new color
-# replaces all board colors with certain color
 
 
+# checks if board was won
 def checkVictory(board):
     for i in [Color.X, Color.O]:  # iterate through player 1 and 2
         for x in range(3):  # iterate through all possible board combinations
@@ -226,9 +226,9 @@ def checkVictory(board):
         if board[0][2][4] == board[1][1][4] == board[2][0][4] == getColor(i)[4]:          # other diagonal
             return i
     return False
-# checks if board was won
 
 
+# makes the information panel
 def infromationBox(screen, screenSz, curP):
     global Buttons  # access the button dictionary
 
@@ -246,20 +246,19 @@ def infromationBox(screen, screenSz, curP):
     pygame.draw.rect(screen, Color.BLUE.value, reset)
     pygame.draw.rect(screen, getColor(curP)[:4:], cBox)
     # draw on screen
-# makes the information panel
 
 
+# initialise all variables for start of game
 def initBoard(sz, p=0):  # p decides who goes first by default its player 1
     gBoard = createBoard(sz)  # create the game board
     startP = Color.X if not p else Color.O  # set player
     startS = 2 if not p else 0  # set hitsound
 
     return gBoard, startP, startS
-# init all variables for start of game
 
 
+# fills entire area with color supports opacity
 def fillColor(display, color, sz, pos=(0, 0)):
     s = pygame.Surface(sz, pygame.SRCALPHA)  # make a surface
     s.fill(color[:4:])          # fill it with color
     display.blit(s, pos)        # put it on display
-# fills entire area with color supports opacity
