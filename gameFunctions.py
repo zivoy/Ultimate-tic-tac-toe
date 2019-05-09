@@ -2,6 +2,7 @@ import pygame
 from enum import Enum
 
 Buttons = dict()
+# dictionary that handles buttons
 
 
 class Color(Enum):
@@ -11,11 +12,7 @@ class Color(Enum):
     WHITE = [255, 255, 255]
     GRAY = [150, 150, 150]
     BLUE = [38, 73, 160]
-
-
-def getColor(color, alpha=225):
-    col = [*color.value, alpha, color.name]
-    return col
+# miniclass that handles colors
 
 
 class board:
@@ -27,19 +24,22 @@ class board:
         self.parts = parts
         self.displayB = pygame.Surface((self.sizex, self.sizey), pygame.SRCALPHA)
         self.boardOver = getColor(Color.WHITE, 0)
-        self.Board = ticTacToeBoard()
+        self.Board = ticTacToeBoard(getColor(Color.WHITE, 0))
+    # class that handles small boards
 
     def bigBoard(self, col=None, alpha=180):
         if col is not None:
             self.boardOver = getColor(col, alpha)
         else:
             return self.boardOver
+    # function that changes the color over boards
 
     def boardSquares(self, x, y, col=None):
         if col is not None:
             self.Board[x][y] = getColor(col)
         else:
             return self.Board[x][y]
+    # function that changes the color of board tiles
 
     def draw(self, screen):
         self.displayB.fill((255, 255, 255))  # (0, 0, 0))
@@ -59,9 +59,17 @@ class board:
         drawGrid(self.displayB, 2, self.parts)
 
         screen.blit(self.displayB, (self.boardx, self.boardy))
+    # function that draw the board
 
     def update(self, screen):
         self.draw(screen)
+    # function that updates the board
+
+
+def getColor(color, alpha=225):
+    col = [*color.value, alpha, color.name]
+    return col
+# function that gets the color adds alpha and returns it in different format
 
 
 def drawGrid(display, thickness, amount=3):
@@ -73,6 +81,7 @@ def drawGrid(display, thickness, amount=3):
 
         pygame.draw.line(display, (0, 0, 0), (0, posy), (h, posy), thickness)
         pygame.draw.line(display, (0, 0, 0), (posx, 0), (posx, h), thickness)
+# draw a grid
 
 
 def drawGame(display, board):
@@ -80,17 +89,18 @@ def drawGame(display, board):
 
     updateBoards(board, display)
 
-    drawGrid(display, 5)
+    drawGrid(display, 3)
+# draw the whole game board
 
 
-def ticTacToeBoard():
+def ticTacToeBoard(fillWith):
     gameB = list()
     for i in range(3):
         gameB.append(list())
         for j in range(3):
-            gameB[i].append(list())
-            gameB[i][j] = getColor(Color.WHITE, 0)
+            gameB[i].append(fillWith)
     return gameB
+# make a list that makes an empty list and populates it with a item
 
 
 def createBoard(wh):
@@ -107,10 +117,12 @@ def createBoard(wh):
 
     replaceWith(gboard, Color.WHITE, Color.HIGHLIGHT, 80)
     return gboard
+# function that makes a list that handles the entire game board
 
 
 def updateBoards(dataTable, display):
     [[j.update(display) for j in i] for i in dataTable]
+# dunction that updates all boards
 
 
 def handleGame(dataTable):
@@ -128,6 +140,7 @@ def handleGame(dataTable):
         replaceWith(dataTable, Color.GRAY, Color.WHITE, 0)
         replaceWith(dataTable, Color.HIGHLIGHT, Color.WHITE, 0)
         return vik
+# function that handles game logic
 
 
 def clickHandler(mousePos, wh):
@@ -141,6 +154,7 @@ def clickHandler(mousePos, wh):
         sB[i] = min(int(brd) % 3, 2)
 
     return bB, sB
+# functions that calculates what board and tile was pressed
 
 
 def placeTile(dataTable, clickTile, color, sound):
@@ -162,6 +176,7 @@ def placeTile(dataTable, clickTile, color, sound):
                 dataTable[tile[0]][tile[1]].bigBoard(Color.HIGHLIGHT, 80)
                 replaceWith(dataTable, Color.WHITE, Color.GRAY, 60)
     return completed
+# functions that places a tile and handles colors
 
 
 def flaging(variable, option1, option2):
@@ -169,6 +184,7 @@ def flaging(variable, option1, option2):
         return option2
     else:
         return option1
+# made to make flag variables easier
 
 
 def replaceWith(dataTable, original, changed, alpha=180):
@@ -176,6 +192,7 @@ def replaceWith(dataTable, original, changed, alpha=180):
         for j in i:
             if j.bigBoard()[4] == original.name:
                 j.bigBoard(changed, alpha)
+# replaces all board colors with certain color
 
 
 def checkVictory(board):
@@ -191,6 +208,7 @@ def checkVictory(board):
         if board[0][2][4] == board[1][1][4] == board[2][0][4] == getColor(i)[4]:
             return i
     return False
+# checks if board was won
 
 
 def infromationBox(screen, screenSz, curP):
@@ -205,16 +223,20 @@ def infromationBox(screen, screenSz, curP):
     pygame.draw.rect(screen, Color.WHITE.value, wBox)
     pygame.draw.rect(screen, Color.BLUE.value, reset)
     pygame.draw.rect(screen, getColor(curP)[:4:], cBox)
+# makes the information panel
 
 
 def initBoard(sz, p=0):
     gBoard = createBoard(sz)
     startP = Color.X if not p else Color.O
+    startS = 2 if not p else 0
 
-    return gBoard, startP
+    return gBoard, startP, startS
+# init all variables for start of game
 
 
 def fillColor(display, color, sz, pos=(0, 0)):
     s = pygame.Surface(sz, pygame.SRCALPHA)
     s.fill(color[:4:])
     display.blit(s, pos)
+# fills entire area with color supports opacity
