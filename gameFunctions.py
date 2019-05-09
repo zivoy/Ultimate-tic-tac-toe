@@ -43,7 +43,7 @@ class board:
 
     # function that draw the board
     def draw(self, screen):
-        self.displayB.fill(getColor(Color.WHITE))  # fill surface with white
+        self.displayB.fill(getColor(Color.WHITE)[:4:])  # fill surface with white
 
         for x in range(self.parts):
             for y in range(self.parts):
