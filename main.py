@@ -7,7 +7,7 @@ szMultiplier = 80
 
 sz = 1000
 
-sz = sz * szMultipliyer / 100
+sz = sz * szMultiplier / 100
 boardSz = [sz, sz]
 dispSz = [int(boardSz[0] * 1.4), int(boardSz[1] * 1.02)]
 gameAt = [int(boardSz[0] * .01), int(boardSz[1] * .01)]
