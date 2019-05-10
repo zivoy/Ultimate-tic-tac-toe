@@ -1,6 +1,9 @@
 import pygame
 from enum import Enum
 
+pygame.font.init()
+# init fonts
+
 Buttons = dict()
 # dictionary that handles buttons
 
@@ -232,12 +235,17 @@ def checkVictory(board):
 def infromationBox(screen, screenSz, curP, gameLogo):
     global Buttons  # access the button dictionary
 
+    infoFont = pygame.font.SysFont('Ubuntu.ttf', int(screenSz[1] * .06))
+    # make font
+
     wBox = pygame.Rect(screenSz[0] * .73, screenSz[1] * .03, screenSz[0] * .26, screenSz[1] * .94)
     # box for panel
     reset = pygame.Rect(screenSz[0] * .75, screenSz[1] * .85, screenSz[0] * .22, screenSz[1] * .1)
     # box for reset button
     cBox = pygame.Rect(screenSz[0] * .75, screenSz[1] * .06, screenSz[1] * .1, screenSz[1] * .1)
     # box for current player square
+    resetGame = infoFont.render("Restart Game", True, (0, 0, 0))
+    turn = infoFont.render("'s turn", True, (0, 0, 0))
 
     Buttons["reset"] = reset
     # add reset button to buttons dict for collision checking
@@ -250,6 +258,8 @@ def infromationBox(screen, screenSz, curP, gameLogo):
     pygame.draw.rect(screen, Color.BLUE.value, reset)
     pygame.draw.rect(screen, getColor(curP)[:4:], cBox)
     screen.blit(gameLogo, (screenSz[0] * .75, screenSz[1] * .52))
+    screen.blit(resetGame, (screenSz[0] * .76, screenSz[1] * .88))
+    screen.blit(turn, (screenSz[0] * .825, screenSz[1] * .07))
     # draw on screen
 
 
