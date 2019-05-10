@@ -17,6 +17,10 @@ screen = pygame.display.set_mode(boardSz)
 pygame.display.set_caption("Ultimate Tic Tac Toe")
 # make the screen and set the title
 
+logo = pygame.image.load("images/Logo.png").convert_alpha()
+pygame.display.set_icon(logo)
+# load logo and set as window icon
+
 gameScreen = pygame.Surface(boardSz)
 gameBoard, currPlayer, playerSound = initBoard(boardSz)
 # make the game board and set starting player
@@ -119,7 +123,7 @@ while s:
     screen.blit(gameScreen, gameAt)
     # put the game on the screen
 
-    infromationBox(screen, dispSz, currPlayer)
+    infromationBox(screen, dispSz, currPlayer, logo)
     # put the info box on screen
 
     pygame.display.flip()

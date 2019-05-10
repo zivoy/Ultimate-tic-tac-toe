@@ -229,7 +229,7 @@ def checkVictory(board):
 
 
 # makes the information panel
-def infromationBox(screen, screenSz, curP):
+def infromationBox(screen, screenSz, curP, gameLogo):
     global Buttons  # access the button dictionary
 
     wBox = pygame.Rect(screenSz[0] * .73, screenSz[1] * .03, screenSz[0] * .26, screenSz[1] * .94)
@@ -242,9 +242,14 @@ def infromationBox(screen, screenSz, curP):
     Buttons["reset"] = reset
     # add reset button to buttons dict for collision checking
 
+    scl = screenSz[0] * .23 / max(gameLogo.get_rect().size)
+    gameLogo = pygame.transform.rotozoom(gameLogo, 0, scl)
+    # resise logo
+
     pygame.draw.rect(screen, Color.WHITE.value, wBox)
     pygame.draw.rect(screen, Color.BLUE.value, reset)
     pygame.draw.rect(screen, getColor(curP)[:4:], cBox)
+    screen.blit(gameLogo, (screenSz[0] * .75, screenSz[1] * .52))
     # draw on screen
 
 
